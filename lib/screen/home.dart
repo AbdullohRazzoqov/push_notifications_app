@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,47 +16,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     FirebaseMessaging.instance.getToken();
-
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
         String? title = message.notification!.title;
         String? body = message.notification!.body;
-        AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: 123,
-            channelKey: "call_channel",
-            color: Colors.white,
-            title: title,
-            body: body,
-            category: NotificationCategory.Call,
-            wakeUpScreen: true,
-            fullScreenIntent: true,
-            autoDismissible: false,
-            backgroundColor: Colors.orange,
-          ),
-          actionButtons: [
-            // NotificationActionButton(
-            //     key: 'ACCEPT',
-            //     label: 'Accept call',
-            //     color: Colors.green,
-            //     autoDismissible: true),
-            NotificationActionButton(
-              key: 'REJECT',
-              label: 'Tushundim',
-              color: Colors.red,
-              autoDismissible: true,
-            ),
-          ],
-        );
-        AwesomeNotifications().actionStream.listen((event) {
-          if (event.buttonKeyPressed == "REJECT") {
-            print("Call Reject");
-          } else if (event.buttonKeyPressed == "ACCEPT") {
-            print("Call accept");
-          } else {
-            print('clict on notifications');
-          }
-        });
+        print(title);
+        print(body);
       },
     );
   }
@@ -71,7 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             GestureDetector(
               onTap: () async {
-                print("Tokin ishladi");
                 String? token = await FirebaseMessaging.instance.getToken();
                 print('Token: R$token');
               },
@@ -84,10 +47,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             GestureDetector(
               onTap: () async {
-                print(
-                  "Sent push ishladi",
-                );
-
                 sendPushNotification();
               },
               child: Container(
@@ -120,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
           <String, dynamic>{
             'notification': <String, dynamic>{
               'body': 'Qayerda san',
-              'title': 'Abdulloh',
             },
             'priority': 'high',
             'data': <String, dynamic>{
